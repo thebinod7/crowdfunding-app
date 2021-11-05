@@ -5,9 +5,13 @@ import Swal from 'sweetalert2';
 import './App.css';
 import Navbar from './components/Navbar';
 import BG_IMAGE from './assets/cf_bg.jpg';
+import Main from './components/Main';
+import Loader from './global/Loader';
 
 function App() {
     const [currentAccount, setCurrentAccount] = useState('');
+    const [loading, setLoading] = useState('');
+    const [projects, setProjects] = useState([]);
 
     const loadWeb3 = async () => {
         // Modern dapp browsers...
@@ -58,6 +62,8 @@ function App() {
                                 backgroundSize: 'cover',
                             }}
                         />
+
+                        {loading ? <Loader /> : <Main projects={projects} />}
                     </main>
                 </div>
             </div>
