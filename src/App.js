@@ -7,11 +7,13 @@ import Navbar from './components/Navbar';
 import BG_IMAGE from './assets/cf_bg.jpg';
 import Main from './components/Main';
 import Loader from './global/Loader';
+import CrowdFunding from './abis/Crowdfunding.json';
 
 function App() {
     const [currentAccount, setCurrentAccount] = useState('');
     const [loading, setLoading] = useState('');
     const [projects, setProjects] = useState([]);
+    const [cfContract, setCFContract] = useState({});
 
     const loadWeb3 = async () => {
         // Modern dapp browsers...
@@ -42,9 +44,67 @@ function App() {
         }
     };
 
+    const fetchProjectsList = async () => {
+        if (window.web3) {
+            const { web3 } = window;
+            // Load Accounts
+            const accounts = await web3.eth.getAccounts();
+            // Set current Account to State
+            setCurrentAccount(accounts[0]);
+            // Get networkId
+            const networkId = await web3.eth.net.getId();
+            const networkData = CrowdFunding.networks[networkId];
+            // Get abi Data from ABI json file
+            try {
+                const { abi } = CrowdFunding;
+                const { address } = networkData;
+                const contract = new web3.eth.Contract(abi, address);
+                setCFContract({ ...contract });
+                const projectCounter = await contract.methods.projectCount().call();
+                const projectLists = [];
+                for (let i = 1; i <= projectCounter; i++) {
+                    const project = await contract.methods.projects(i).call();
+                    projectLists.push(project);
+                }
+                setProjects(projectLists);
+                setLoading(false);
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Contract not deployed to detected Network!',
+                });
+            }
+        }
+    };
+
+    const createProject = async (name, desc, target, closingDate) => {
+        setLoading(true);
+        try {
+            cfContract.methods
+                .createProject(name, desc, target, closingDate)
+                .send({ from: currentAccount })
+                .once('receipt', async (receipt) => {
+                    await fetchProjectsList();
+                    setLoading(false);
+                })
+                .catch((e) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: e.message,
+                    });
+                    setLoading(false);
+                });
+        } catch (e) {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         console.log('App EFFECT!');
         loadWeb3();
+        fetchProjectsList();
     }, []);
 
     return (
@@ -63,7 +123,11 @@ function App() {
                             }}
                         />
 
-                        {loading ? <Loader /> : <Main projects={projects} />}
+                        {loading ? (
+                            <Loader />
+                        ) : (
+                            <Main projects={projects} createProject={createProject} />
+                        )}
                     </main>
                 </div>
             </div>
