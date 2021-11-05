@@ -1,1 +1,2 @@
 1. Create app using 'npx create-react-app app-name'
+2. App cleanup and setup dev dependencies.
