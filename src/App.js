@@ -101,6 +101,58 @@ function App() {
         }
     };
 
+    const fundProject = async (id, amount) => {
+        setLoading(true);
+        try {
+            const WeiAmt = window.web3.utils.toWei(amount, 'Ether');
+            cfContract.methods
+                .fundProject(id)
+                .send({ from: currentAccount, value: WeiAmt })
+                .once('receipt', async (receipt) => {
+                    await fetchProjectsList();
+                    setLoading(false);
+                })
+                .catch((e) => {
+                    let err;
+                    if (e.code === -32603)
+                        err = "Owner can't fund the project created by themselves";
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err || e.message,
+                    });
+                    setLoading(false);
+                });
+        } catch (e) {
+            setLoading(false);
+        }
+    };
+
+    const closeProject = async (id) => {
+        setLoading(true);
+        try {
+            cfContract.methods
+                .closeProject(id)
+                .send({ from: currentAccount })
+                .once('receipt', async (receipt) => {
+                    await fetchProjectsList();
+                    setLoading(false);
+                })
+                .catch((e) => {
+                    let err;
+                    if (e.code === -32603) err = 'Only Project Owner can close this project.';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err || e.message,
+                    });
+                    setLoading(false);
+                });
+        } catch (e) {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         console.log('App EFFECT!');
         loadWeb3();
@@ -126,7 +178,12 @@ function App() {
                         {loading ? (
                             <Loader />
                         ) : (
-                            <Main projects={projects} createProject={createProject} />
+                            <Main
+                                projects={projects}
+                                createProject={createProject}
+                                fundProject={fundProject}
+                                closeProject={closeProject}
+                            />
                         )}
                     </main>
                 </div>
