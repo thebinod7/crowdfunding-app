@@ -8,6 +8,7 @@ import BG_IMAGE from './assets/cf_bg.jpg';
 import Main from './components/Main';
 import Loader from './global/Loader';
 import CrowdFunding from './abis/Crowdfunding.json';
+import { ethToWei } from './utils';
 
 function App() {
     const [currentAccount, setCurrentAccount] = useState('');
@@ -104,7 +105,7 @@ function App() {
     const fundProject = async (id, amount) => {
         setLoading(true);
         try {
-            const WeiAmt = window.web3.utils.toWei(amount, 'Ether');
+            const WeiAmt = ethToWei(amount);
             cfContract.methods
                 .fundProject(id)
                 .send({ from: currentAccount, value: WeiAmt })
@@ -154,7 +155,6 @@ function App() {
     };
 
     useEffect(() => {
-        console.log('App EFFECT!');
         loadWeb3();
         fetchProjectsList();
     }, []);

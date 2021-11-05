@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, ProgressBar, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { weiToEth } from '../utils';
 
 export default function ProjectBox({ project }) {
     return (
@@ -43,8 +44,8 @@ export default function ProjectBox({ project }) {
                     <ListGroupItem>
                         Target/Collected:&nbsp;
                         {project && project.target && project.balance
-                            ? `${window.web3.utils.fromWei(project.target, 'Ether')}
-                        / ${String(window.web3.utils.fromWei(project.balance, 'Ether'))}`
+                            ? `${weiToEth(project.target)}
+                        / ${String(weiToEth(project.balance))}`
                             : '-'}
                         <em> Ethers</em>
                     </ListGroupItem>

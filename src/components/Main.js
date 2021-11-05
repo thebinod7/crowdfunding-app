@@ -3,7 +3,7 @@ import { Row, Col, Modal, Button, Card, Dropdown, DropdownButton, Alert } from '
 
 import ActionBar from './ActionBar';
 import ProjectBox from './ProjectBox';
-import { calculateDaysLeft, calculatePercentage } from '../utils';
+import { calculateDaysLeft, calculatePercentage, ethToWei } from '../utils';
 
 const BORDER_DESINGS = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
 
@@ -51,10 +51,7 @@ function Main({ closeProject, createProject, fundProject, projects }) {
                                 const name = nameRef.current.value;
                                 const desc = descRef.current.value;
                                 const closingDate = new Date(endDateRef.current.value).valueOf();
-                                const target = window.web3.utils.toWei(
-                                    targetRef.current.value.toString(),
-                                    'Ether',
-                                );
+                                const target = ethToWei(targetRef.current.value.toString());
                                 createProject(name, desc, closingDate, target);
                             }}
                         >
