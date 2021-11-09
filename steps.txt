@@ -1,5 +1,0 @@
-1. Create app using 'npx create-react-app app-name'.
-2. App cleanup and setup dev dependencies.
-3. Initialize truffle confis with `truffle init`.
-4. Setup bootstrap and UI.
-5. Init web3
