@@ -1,8 +1,9 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 
-const MNEMONIC = 'YOUR_MNEMONIC';
-const RINKEBY_NODE = 'RINKEBY_NODE_URL';
-const POLYGON_URL = 'POLYGON_NODE_URL';
+const MNEMONIC = 'YOUR_MNEMONIC_PHRASE';
+const RINKEBY_NODE = 'https://rinkeby.infura.io/v3/e08d0fc4dd864c68ba37e292d73e063a';
+const POLYGON_URL = 'https://rpc-mumbai.maticvigil.com/';
+const BINANCE_TESTNET_URL = 'https://data-seed-prebsc-1-s1.binance.org:8545/';
 
 module.exports = {
     networks: {
@@ -16,6 +17,12 @@ module.exports = {
                 return new HDWalletProvider(MNEMONIC, RINKEBY_NODE);
             },
             network_id: 4,
+        },
+        binanceTestnet: {
+            provider: function () {
+                return new HDWalletProvider(MNEMONIC, BINANCE_TESTNET_URL);
+            },
+            network_id: 97,
         },
         polygonTestnet: {
             provider: function () {

@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, ProgressBar, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { weiToEth } from '../utils';
 
+const TOKEN_SYMBOL = 'BNB';
+
 export default function ProjectBox({ project }) {
     return (
         <>
@@ -47,7 +49,7 @@ export default function ProjectBox({ project }) {
                             ? `${weiToEth(project.target)}
                         / ${String(weiToEth(project.balance))}`
                             : '-'}
-                        <em> Ethers</em>
+                        <em> {TOKEN_SYMBOL}</em>
                     </ListGroupItem>
                     <ListGroupItem>
                         <small className="text-muted">

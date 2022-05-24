@@ -84,7 +84,7 @@ function Main({ closeProject, createProject, fundProject, projects }) {
                                 </Col>
                                 <Col>
                                     <div className="form-group mr-sm-2 mb-sm-2">
-                                        <label htmlFor="projectTarget">Target Amount (Eth)</label>
+                                        <label htmlFor="projectTarget">Target Amount (BNB)</label>
                                         <input
                                             id="projectTarget"
                                             type="text"

@@ -54,9 +54,11 @@ function App() {
             setCurrentAccount(accounts[0]);
             // Get networkId
             const networkId = await web3.eth.net.getId();
+            console.log({ networkId });
             const networkData = CrowdFunding.networks[networkId];
             // Get abi Data from ABI json file
             try {
+                setLoading(true);
                 const { abi } = CrowdFunding;
                 const { address } = networkData;
                 const contract = new web3.eth.Contract(abi, address);
@@ -70,6 +72,7 @@ function App() {
                 setProjects(projectLists);
                 setLoading(false);
             } catch (e) {
+                setLoading(false);
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
